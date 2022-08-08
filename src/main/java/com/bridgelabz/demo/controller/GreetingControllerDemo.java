@@ -2,13 +2,19 @@ package com.bridgelabz.demo.controller;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.catalina.User;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.demo.model.Greeting;
+import com.bridgelabz.demo.model.User;
 
 @RestController
 @RequestMapping("/greetingapp")
@@ -26,6 +32,28 @@ public class GreetingControllerDemo {
 	        return new Greeting(counter.incrementAndGet(),
 	                String.format(template, name));
 	    }
+	    
+	  
+	    @RequestMapping("/user")
+	    public Greeting greetingUser(@RequestParam(value="firstname", defaultValue = "Guest") String firstname,
+	                             @RequestParam(value="lastname", defaultValue = "User") String lastname) {
+	        return new Greeting(counter.incrementAndGet(),
+	                String.format(template, (firstname+" "+lastname)));
+	    }
+
+	    @PutMapping("/{firstname}")
+	    public Greeting greeting1(@PathVariable String firstname,
+	                             @RequestParam(value = "lastname", defaultValue = "User") String lastname) {
+	        return new Greeting(counter.incrementAndGet(),
+	                String.format(template, (firstname+" "+lastname)));
+	    }
+	    
+	    @PostMapping("/greeting")
+	    public String greetingMessage(@RequestBody User user) {
+			return "Hello" +user.getFirstName()+""+user.getLastName();
+	    	
+	    }
+
 	}
 
 
